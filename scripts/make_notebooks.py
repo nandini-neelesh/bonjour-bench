@@ -15,6 +15,7 @@ OUT = Path(__file__).resolve().parents[1] / "notebooks"
 
 SETUP = f'''import os, subprocess
 os.environ["BONJOUR_CKPT_DIR"] = "/kaggle/temp/checkpoints"   # keep large checkpoints out of the saved output
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"   # less GPU memory fragmentation
 if not os.path.exists("/kaggle/working/bonjour-bench"):
     subprocess.run(["git", "clone", "{REPO_URL}", "/kaggle/working/bonjour-bench"], check=True)
 os.chdir("/kaggle/working/bonjour-bench")

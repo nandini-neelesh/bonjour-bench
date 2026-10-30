@@ -81,6 +81,7 @@ class MT5Config:
     batch_size: int = 32
     lr: float = 1e-3  # Adafactor, constant
     max_len: int = 128
+    max_batch_tokens: int = 1_600  # padded tokens per batch; the 250k-word output layer dominates memory
 
 
 @dataclass
@@ -97,6 +98,7 @@ class CausalLMConfig:
     lr: float = 2e-4
     warmup_ratio: float = 0.03
     max_seq_len: int = 192
+    max_batch_tokens: int = 1_536  # padded tokens per micro-batch (logits are vocab-sized)
     n_shots: int = 5  # few-shot baseline
 
 

@@ -51,11 +51,12 @@ class MT5Translator(Translator):
     def _val_loss(self, enc, labels):
         self.model.eval()
         total, n = 0.0, 0
-        for idx in bucket_batches([len(x) for x in enc], batch_size=self.cfg.batch_size):
+        lens = [max(len(a), len(b)) for a, b in zip(enc, labels)]
+        for idx in bucket_batches(lens, batch_size=self.cfg.batch_size, max_tokens=self.cfg.max_batch_tokens):
             ids, attn, lab = self._collate(enc, labels, idx)
             loss = self.model(input_ids=ids, attention_mask=attn, labels=lab).loss
             ntok = int((lab != -100).sum())
-            total, n = total + float(loss) * ntok, n + ntok
+            total, n = total + loss.item() * ntok, n + ntok
         return total / max(n, 1)
 
     def train(self, train, val):
@@ -78,7 +79,8 @@ class MT5Translator(Translator):
         with Timer() as timer:
             for epoch in range(1, c.epochs + 1):
                 self.model.train()
-                batches = bucket_batches([len(x) for x in enc], batch_size=c.batch_size, shuffle=True,
+                lens = [max(len(a), len(b)) for a, b in zip(enc, labels)]
+                batches = bucket_batches(lens, batch_size=c.batch_size, max_tokens=c.max_batch_tokens, shuffle=True,
                                          seed=C.SEED + epoch)
                 run, n = 0.0, 0
                 for k, idx in enumerate(batches, 1):
@@ -88,7 +90,7 @@ class MT5Translator(Translator):
                     torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                     opt.step()
                     opt.zero_grad(set_to_none=True)
-                    run, n = run + float(loss), n + 1
+                    run, n = run + loss.item(), n + 1
                     if k % 100 == 0:
                         print(f"epoch {epoch} step {k}/{len(batches)} loss {run / n:.3f} "
                               f"({time.perf_counter() - start:.0f}s)", flush=True)

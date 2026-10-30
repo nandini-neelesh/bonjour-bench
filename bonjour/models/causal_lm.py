@@ -129,12 +129,13 @@ class CausalLMTranslator(Translator):
     def _val_loss(self, items):
         self.model.eval()
         total, n = 0.0, 0
-        for idx in bucket_batches([len(x[0]) for x in items], batch_size=self.cfg.micro_batch):
+        for idx in bucket_batches([len(x[0]) for x in items], batch_size=self.cfg.micro_batch,
+                                  max_tokens=self.cfg.max_batch_tokens):
             ids, att, lab = self._collate(items, idx)
             with torch.autocast("cuda", dtype=self.dtype, enabled=self.device == "cuda" and self.dtype != torch.float32):
                 loss = self._loss(ids, att, lab)
             ntok = int((lab[:, 1:] != -100).sum())
-            total, n = total + float(loss) * ntok, n + ntok
+            total, n = total + loss.item() * ntok, n + ntok
         return total / max(n, 1)
 
     def train(self, train, val):
@@ -172,7 +173,8 @@ class CausalLMTranslator(Translator):
         with Timer() as timer:
             for epoch in range(1, c.epochs + 1):
                 self.model.train()
-                batches = bucket_batches([len(x[0]) for x in items], batch_size=c.micro_batch, shuffle=True,
+                batches = bucket_batches([len(x[0]) for x in items], batch_size=c.micro_batch,
+                                         max_tokens=c.max_batch_tokens, shuffle=True,
                                          seed=C.SEED + epoch)
                 run, nrun, tokens = 0.0, 0, 0
                 for bi, idx in enumerate(batches, 1):
@@ -182,7 +184,7 @@ class CausalLMTranslator(Translator):
                     if not torch.isfinite(loss):
                         raise RuntimeError("Non-finite loss. Re-run with --dtype fp32.")
                     scaler.scale(loss / c.grad_accum).backward()
-                    run, nrun, tokens = run + float(loss), nrun + 1, tokens + int(att.sum())
+                    run, nrun, tokens = run + loss.item(), nrun + 1, tokens + int(att.sum())
                     if bi % c.grad_accum == 0 or bi == len(batches):
                         updates += 1
                         lr = c.lr * (updates / warm if updates <= warm else

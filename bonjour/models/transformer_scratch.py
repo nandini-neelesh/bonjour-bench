@@ -247,7 +247,7 @@ class TransformerTranslator(Translator):
             with torch.autocast("cuda", dtype=torch.float16, enabled=self.device == "cuda"):
                 loss = self._loss(src, tgt_in, tgt_out, 0.0)
             ntok = int((tgt_out != PAD).sum())
-            total += float(loss) * ntok
+            total += loss.item() * ntok
             n += ntok
         return total / max(n, 1)
 
@@ -288,7 +288,7 @@ class TransformerTranslator(Translator):
                     nn.utils.clip_grad_norm_(self.model.parameters(), c.grad_clip)
                     scaler.step(opt)
                     scaler.update()
-                    run_loss, run_n = run_loss + float(loss), run_n + 1
+                    run_loss, run_n = run_loss + loss.item(), run_n + 1
                     if step % 100 == 0:
                         print(f"  step {step} loss {run_loss / run_n:.3f} ({time.perf_counter() - start:.0f}s)", flush=True)
                     if self.time_budget_min and (time.perf_counter() - start) / 60 > self.time_budget_min:
