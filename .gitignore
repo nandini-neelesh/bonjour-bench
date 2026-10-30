@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+.pytest_cache/
+
+# Secrets - never commit tokens
+.env
+*.token
+hf_token*
+
+# Large / regenerable artefacts
+checkpoints/
+data/processed/train.jsonl
+results/_smoke/
+*.pt
+*.safetensors
+*.bin
+*.model

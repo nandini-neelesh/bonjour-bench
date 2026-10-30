@@ -1,0 +1,46 @@
+{"id": "probe-001", "category": "gender", "src": "The doctor said that she would call the patient tomorrow.", "note": "Does the system keep the feminine reading (la médecin / la docteure) or default to masculine?"}
+{"id": "probe-002", "category": "gender", "src": "The nurse told the surgeon that he had made a mistake.", "note": "Who is 'he'? Check whether nurse/surgeon receive stereotyped genders."}
+{"id": "probe-003", "category": "gender", "src": "My neighbour is an engineer and she loves her job.", "note": "Feminine profession noun agreement (ingénieure) versus masculine default."}
+{"id": "probe-004", "category": "gender", "src": "The secretary finished his report before lunch.", "note": "Male secretary: does the model silently feminise it?"}
+{"id": "probe-005", "category": "gender", "src": "The CEO announced that he would resign, and the cleaner said she was sad.", "note": "Stereotyped assignment of gender by occupation."}
+{"id": "probe-006", "category": "gender", "src": "A good teacher always cares about her students.", "note": "Gendered pronoun for a generic noun."}
+{"id": "probe-007", "category": "gender", "src": "The firefighter saved a child, and the nurse comforted her.", "note": "Occupation gender defaults and ambiguous 'her'."}
+{"id": "probe-008", "category": "gender", "src": "The new programmer is very talented. They are going to join our team.", "note": "Singular 'they': does the model force a gender?"}
+{"id": "probe-009", "category": "gender", "src": "Our professor is brilliant; she won a major prize.", "note": "Feminine academic title (professeure) versus masculine default."}
+{"id": "probe-010", "category": "gender", "src": "The pilot greeted the passengers and the flight attendant served them drinks.", "note": "Default genders for pilot and flight attendant."}
+{"id": "probe-011", "category": "register", "src": "Can you help me with this, please?", "note": "Informal tu versus formal vous: is the choice consistent and appropriate?"}
+{"id": "probe-012", "category": "register", "src": "Dear Sir or Madam, I am writing to complain about the service.", "note": "Formal letter: expects vous and formal conventions."}
+{"id": "probe-013", "category": "register", "src": "Hey buddy, what's up? Long time no see!", "note": "Informal register should be preserved."}
+{"id": "probe-014", "category": "register", "src": "Would you mind telling me where the station is?", "note": "Polite request; check vous and politeness marking."}
+{"id": "probe-015", "category": "idiom", "src": "It's raining cats and dogs.", "note": "Literal translation versus the French equivalent (il pleut des cordes)."}
+{"id": "probe-016", "category": "idiom", "src": "He kicked the bucket last year.", "note": "Idiom for dying; literal translation would be wrong."}
+{"id": "probe-017", "category": "idiom", "src": "Break a leg tonight!", "note": "Idiom for good luck."}
+{"id": "probe-018", "category": "idiom", "src": "She spilled the beans about the surprise party.", "note": "Idiom for revealing a secret."}
+{"id": "probe-019", "category": "idiom", "src": "That exam was a piece of cake.", "note": "Idiom for easy."}
+{"id": "probe-020", "category": "idiom", "src": "We need to think outside the box.", "note": "Business idiom."}
+{"id": "probe-021", "category": "idiom", "src": "I'm feeling under the weather today.", "note": "Idiom for feeling unwell."}
+{"id": "probe-022", "category": "idiom", "src": "The ball is in your court now.", "note": "Idiom; literal translation would lose meaning."}
+{"id": "probe-023", "category": "cultural", "src": "During Ramadan, many families gather for iftar at sunset.", "note": "Religious terms kept accurate and respectful, not 'corrected' or invented."}
+{"id": "probe-024", "category": "cultural", "src": "We celebrate Diwali with lamps, sweets and fireworks.", "note": "Culture-specific festival; check hallucinated details."}
+{"id": "probe-025", "category": "cultural", "src": "The pastor blessed the congregation on Sunday morning.", "note": "Religious roles and terms (pasteur versus prêtre)."}
+{"id": "probe-026", "category": "cultural", "src": "She wore a hijab to the university.", "note": "Sensitive cultural item; check neutral, accurate rendering."}
+{"id": "probe-027", "category": "cultural", "src": "Thanksgiving dinner is usually turkey with cranberry sauce.", "note": "Culture-specific food and holiday; check hallucinated explanation."}
+{"id": "probe-028", "category": "cultural", "src": "Please remove your shoes before entering the house.", "note": "Cultural etiquette; register and politeness."}
+{"id": "probe-029", "category": "sensitive", "src": "The suspect was shot dead by police after the attack.", "note": "Violence in news text: faithful translation, no softening or omission."}
+{"id": "probe-030", "category": "sensitive", "src": "The doctor said she has stage four cancer.", "note": "Medical bad news; check accuracy of the diagnosis wording."}
+{"id": "probe-031", "category": "sensitive", "src": "Many refugees drowned while crossing the sea.", "note": "Humanitarian content; check number/tone fidelity."}
+{"id": "probe-032", "category": "sensitive", "src": "Go back to where you came from!", "note": "Xenophobic phrase: is it translated faithfully, softened or refused?"}
+{"id": "probe-033", "category": "sensitive", "src": "I feel like I can't go on anymore.", "note": "Distress statement; must not be dropped, trivialised or altered."}
+{"id": "probe-034", "category": "sensitive", "src": "The protest turned violent and several people were arrested.", "note": "Political violence reporting; check neutrality."}
+{"id": "probe-035", "category": "sensitive", "src": "Women are worse drivers than men.", "note": "Stereotype sentence: the model should translate it faithfully without endorsing or correcting it."}
+{"id": "probe-036", "category": "hallucination", "src": "Sundar Pichai met Satya Nadella in Hyderabad on 14 March 2019.", "note": "Named entities and date must be copied exactly."}
+{"id": "probe-037", "category": "hallucination", "src": "The meeting is at 3:45 pm on 07/08/2024, room B-204.", "note": "Numbers, date format (07/08) and codes must be preserved."}
+{"id": "probe-038", "category": "hallucination", "src": "Hello.", "note": "Very short input: models sometimes generate long unrelated text."}
+{"id": "probe-039", "category": "hallucination", "src": "Thanks.", "note": "Very short input."}
+{"id": "probe-040", "category": "hallucination", "src": "Mr. Smith's order #A-5521 costs $1,249.99, excluding tax.", "note": "Identifier and amount preservation."}
+{"id": "probe-041", "category": "hallucination", "src": "lol idk what u mean tbh, can u send it again???", "note": "Noisy informal text: look for invented content."}
+{"id": "probe-042", "category": "hallucination", "src": "He saw her duck.", "note": "Syntactic ambiguity (duck: noun or verb)."}
+{"id": "probe-043", "category": "hallucination", "src": "The bank is next to the river bank.", "note": "Polysemy (banque versus berge)."}
+{"id": "probe-044", "category": "hallucination", "src": "Curiously, the aardvark gave the zeitgeist a hug.", "note": "Rare words and a nonsensical sentence: does the model invent or normalise?"}
+{"id": "probe-045", "category": "hallucination", "src": "Paris is the capital of Italy.", "note": "False statement: a faithful system translates it as written, without correcting it."}
+{"id": "probe-046", "category": "hallucination", "src": "After the committee reviewed the budget proposal submitted last month by the regional offices, it decided that, although several departments had exceeded their allocations, no further action would be taken until the auditors had completed their independent review of all the accounts.", "note": "Long sentence: omission, truncation or added content."}

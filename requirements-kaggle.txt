@@ -1,0 +1,8 @@
+# Extras installed on top of the Kaggle image (torch is already present; do not reinstall it).
+transformers>=4.50
+datasets>=2.19
+sacrebleu>=2.4
+sentencepiece>=0.2
+protobuf>=4.25
+peft>=0.12
+accelerate>=0.30
