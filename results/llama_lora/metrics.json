@@ -1,0 +1,52 @@
+{
+  "run": "llama_lora",
+  "display_name": "LLaMA 3.2 1B (LoRA)",
+  "architecture": "decoder-only",
+  "pretrained": true,
+  "adaptation": "LoRA fine-tuning",
+  "model_id": "meta-llama/Llama-3.2-1B",
+  "precision": "float16",
+  "n_train_available": 5000,
+  "n_test": 1905,
+  "bleu": 23.6,
+  "chrf": 49.15,
+  "len_ratio": 0.965,
+  "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+  "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+  "empty_rate": 0.0,
+  "copy_rate": 0.0184,
+  "train_time_s": 132.4,
+  "inference_time_s": 132.3,
+  "inference_ms_per_sentence": 69.45,
+  "inference_batch_size": 32,
+  "decoding": "greedy, max_new_tokens=128",
+  "params_total": 1235814400,
+  "params_trainable": 11272192,
+  "training": {
+    "train_time_s": 132.4,
+    "epochs_run": 1,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 1.3401,
+        "val_loss": 1.2626,
+        "elapsed_s": 132.4
+      }
+    ],
+    "train_pairs_used": 4938,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_params_trainable": 11272192,
+    "lora_params_total_with_adapters": 1247086592
+  },
+  "hardware": {
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "cuda_available": true,
+    "transformers": "5.16.1",
+    "gpu": "Tesla T4",
+    "gpu_memory_gb": 14.6,
+    "gpu_count": 2
+  },
+  "smoke": false
+}

@@ -1,0 +1,49 @@
+{
+  "run": "mt5_small_ft",
+  "display_name": "mT5-small (fine-tuned)",
+  "architecture": "encoder-decoder",
+  "pretrained": true,
+  "adaptation": "full fine-tuning",
+  "model_id": "google/mt5-small",
+  "precision": "fp32",
+  "n_train_available": 30000,
+  "n_test": 1905,
+  "bleu": 12.36,
+  "chrf": 34.79,
+  "len_ratio": 0.975,
+  "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+  "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+  "empty_rate": 0.0,
+  "copy_rate": 0.0068,
+  "train_time_s": 648.6,
+  "inference_time_s": 84.58,
+  "inference_ms_per_sentence": 44.4,
+  "inference_batch_size": 32,
+  "decoding": "greedy, max_new_tokens=128",
+  "params_total": 300176768,
+  "params_trainable": 300176768,
+  "training": {
+    "train_time_s": 648.6,
+    "epochs_run": 1,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 3.1324,
+        "val_loss": 2.1675,
+        "elapsed_s": 648.6
+      }
+    ],
+    "train_pairs_used": 30000,
+    "stopped_by_time_budget": false
+  },
+  "hardware": {
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "cuda_available": true,
+    "transformers": "5.16.1",
+    "gpu": "Tesla T4",
+    "gpu_memory_gb": 14.6,
+    "gpu_count": 2
+  },
+  "smoke": false
+}

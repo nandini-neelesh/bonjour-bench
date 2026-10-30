@@ -1,0 +1,157 @@
+[
+  {
+    "temperature": 0.0,
+    "decoding": "greedy",
+    "n_sentences": 150,
+    "bleu_mean": 11.87,
+    "bleu_std": 0.0,
+    "chrf_mean": 33.15,
+    "chrf_std": 0.0,
+    "len_ratio_mean": 0.988,
+    "copy_rate_mean": 0.0067,
+    "runs": [
+      {
+        "bleu": 11.87,
+        "chrf": 33.15,
+        "len_ratio": 0.988,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0067,
+        "seed": 0
+      }
+    ]
+  },
+  {
+    "temperature": 0.3,
+    "decoding": "sampling",
+    "n_sentences": 150,
+    "bleu_mean": 11.16,
+    "bleu_std": 0.33,
+    "chrf_mean": 34.16,
+    "chrf_std": 0.48,
+    "len_ratio_mean": 0.891,
+    "copy_rate_mean": 0.0133,
+    "runs": [
+      {
+        "bleu": 11.49,
+        "chrf": 34.64,
+        "len_ratio": 0.88,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0133,
+        "seed": 0
+      },
+      {
+        "bleu": 10.82,
+        "chrf": 33.69,
+        "len_ratio": 0.902,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0133,
+        "seed": 1
+      }
+    ]
+  },
+  {
+    "temperature": 0.7,
+    "decoding": "sampling",
+    "n_sentences": 150,
+    "bleu_mean": 7.66,
+    "bleu_std": 0.08,
+    "chrf_mean": 31.18,
+    "chrf_std": 0.72,
+    "len_ratio_mean": 0.846,
+    "copy_rate_mean": 0.01,
+    "runs": [
+      {
+        "bleu": 7.57,
+        "chrf": 31.9,
+        "len_ratio": 0.876,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0133,
+        "seed": 0
+      },
+      {
+        "bleu": 7.74,
+        "chrf": 30.46,
+        "len_ratio": 0.816,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0067,
+        "seed": 1
+      }
+    ]
+  },
+  {
+    "temperature": 1.0,
+    "decoding": "sampling",
+    "n_sentences": 150,
+    "bleu_mean": 4.78,
+    "bleu_std": 0.2,
+    "chrf_mean": 27.16,
+    "chrf_std": 0.2,
+    "len_ratio_mean": 0.839,
+    "copy_rate_mean": 0.01,
+    "runs": [
+      {
+        "bleu": 4.58,
+        "chrf": 27.36,
+        "len_ratio": 0.815,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0133,
+        "seed": 0
+      },
+      {
+        "bleu": 4.98,
+        "chrf": 26.96,
+        "len_ratio": 0.862,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0067,
+        "seed": 1
+      }
+    ]
+  },
+  {
+    "temperature": 1.5,
+    "decoding": "sampling",
+    "n_sentences": 150,
+    "bleu_mean": 0.67,
+    "bleu_std": 0.12,
+    "chrf_mean": 20.77,
+    "chrf_std": 0.07,
+    "len_ratio_mean": 1.357,
+    "copy_rate_mean": 0.0,
+    "runs": [
+      {
+        "bleu": 0.79,
+        "chrf": 20.84,
+        "len_ratio": 1.275,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0,
+        "seed": 0
+      },
+      {
+        "bleu": 0.54,
+        "chrf": 20.7,
+        "len_ratio": 1.44,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0",
+        "empty_rate": 0.0,
+        "copy_rate": 0.0,
+        "seed": 1
+      }
+    ]
+  }
+]

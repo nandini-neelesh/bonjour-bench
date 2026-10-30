@@ -24,8 +24,14 @@ print(os.getcwd())'''
 
 INSTALL = "!pip install -q -r requirements-kaggle.txt"
 TOKEN = '''from kaggle_secrets import UserSecretsClient
-os.environ["HF_TOKEN"] = UserSecretsClient().get_secret("HF_TOKEN")   # Add-ons > Secrets > HF_TOKEN
-print("Hugging Face token loaded:", bool(os.environ["HF_TOKEN"]))'''
+secrets = UserSecretsClient()
+for label in ("HF_TOKEN", "kaggle-fgai"):   # accepts either Secret name
+    try:
+        os.environ["HF_TOKEN"] = secrets.get_secret(label)
+        break
+    except Exception:
+        continue
+print("Hugging Face token loaded:", bool(os.environ.get("HF_TOKEN")))'''
 GPU = "!nvidia-smi"
 
 
