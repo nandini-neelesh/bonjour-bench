@@ -1,0 +1,11 @@
+{
+  "created_utc": "2026-10-30T07:51:46+00:00",
+  "dataset": "Helsinki-NLP/opus-100",
+  "dataset_revision": "805090dc28bf78897da9641cdf08b61287580df9",
+  "seed": 42,
+  "sha256": {
+    "train.jsonl": "3b7cb0d09644a063da008254c25ec4f184a852c713de8d9f2a3537c48f606f4b",
+    "val.jsonl": "7c2d3c91db69ac5990233b7104e075bc5ee1db9a399fdb83ecd8ba1d016d0297",
+    "test.jsonl": "9186a718f7232d61b0cf7e1bd32c67fd786f1b8d86ead0dca533e52bebe3359b"
+  }
+}

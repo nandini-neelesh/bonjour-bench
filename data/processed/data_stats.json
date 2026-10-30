@@ -1,0 +1,101 @@
+{
+  "dataset": "Helsinki-NLP/opus-100",
+  "config": "en-fr",
+  "raw_sizes": {
+    "train": 1000000,
+    "validation": 2000,
+    "test": 2000
+  },
+  "cleaning_rules": {
+    "normalisation": "Unicode NFC, control characters removed, whitespace collapsed",
+    "min_words": 1,
+    "max_words": 80,
+    "max_char_length_ratio": 2.5,
+    "min_alphabetic_ratio": 0.5,
+    "other": "identical source/target dropped, exact duplicates dropped"
+  },
+  "dropped_by_reason": {
+    "train": {
+      "length_ratio": 22337,
+      "identical_sides": 17193,
+      "non_alphabetic": 10517,
+      "duplicate": 32886,
+      "too_long": 10144
+    },
+    "validation": {
+      "identical_sides": 26,
+      "length_ratio": 36,
+      "too_long": 26,
+      "non_alphabetic": 16,
+      "duplicate": 3
+    },
+    "test": {
+      "identical_sides": 22,
+      "length_ratio": 36,
+      "too_long": 27,
+      "non_alphabetic": 10
+    }
+  },
+  "cleaned_sizes": {
+    "train": 906923,
+    "validation": 1893,
+    "test": 1905
+  },
+  "leakage_removed_from_train": 25,
+  "final_sizes": {
+    "train": 100000,
+    "val": 1000,
+    "test": 1905
+  },
+  "length_stats": {
+    "train": {
+      "en": {
+        "mean_words": 14.75,
+        "median_words": 10.0,
+        "p95_words": 42,
+        "max_words": 80,
+        "vocab_types": 123713
+      },
+      "fr": {
+        "mean_words": 16.02,
+        "median_words": 10.0,
+        "p95_words": 47,
+        "max_words": 80,
+        "vocab_types": 142273
+      }
+    },
+    "val": {
+      "en": {
+        "mean_words": 16.55,
+        "median_words": 12.0,
+        "p95_words": 42,
+        "max_words": 73,
+        "vocab_types": 5821
+      },
+      "fr": {
+        "mean_words": 18.09,
+        "median_words": 12.0,
+        "p95_words": 49,
+        "max_words": 80,
+        "vocab_types": 6480
+      }
+    },
+    "test": {
+      "en": {
+        "mean_words": 16.28,
+        "median_words": 12,
+        "p95_words": 42,
+        "max_words": 79,
+        "vocab_types": 9329
+      },
+      "fr": {
+        "mean_words": 17.96,
+        "median_words": 13,
+        "p95_words": 48,
+        "max_words": 80,
+        "vocab_types": 10343
+      }
+    }
+  },
+  "seed": 42
+}
