@@ -263,7 +263,11 @@ class TransformerTranslator(Translator):
                                 weight_decay=c.weight_decay)
         scaler = torch.amp.GradScaler("cuda", enabled=self.device == "cuda")
         step, best, best_state, bad, history = 0, float("inf"), None, 0, []
+        n_batches = len(bucket_batches([max(len(x[0]), len(x[1])) for x in train_items], max_tokens=c.max_tokens))
+        warmup = min(c.warmup_steps, max(50, int(0.1 * c.epochs * n_batches)))  # short runs need short warm-up
+        print(f"{n_batches} batches/epoch, warm-up {warmup} steps, device {self.device}", flush=True)
         start = time.perf_counter()
+        out_of_time = False
         with Timer() as timer:
             for epoch in range(1, c.epochs + 1):
                 self.model.train()
@@ -272,7 +276,7 @@ class TransformerTranslator(Translator):
                 run_loss, run_n = 0.0, 0
                 for idx in batches:
                     step += 1
-                    lr = c.lr * min(step / c.warmup_steps, math.sqrt(c.warmup_steps / step))
+                    lr = c.lr * min(step / warmup, math.sqrt(warmup / step))
                     for g in opt.param_groups:
                         g["lr"] = lr
                     src, tgt_in, tgt_out = self._collate(train_items, idx)
@@ -285,6 +289,11 @@ class TransformerTranslator(Translator):
                     scaler.step(opt)
                     scaler.update()
                     run_loss, run_n = run_loss + float(loss), run_n + 1
+                    if step % 100 == 0:
+                        print(f"  step {step} loss {run_loss / run_n:.3f} ({time.perf_counter() - start:.0f}s)", flush=True)
+                    if self.time_budget_min and (time.perf_counter() - start) / 60 > self.time_budget_min:
+                        out_of_time = True
+                        break
                 v = self._val_loss(val_items)
                 history.append({"epoch": epoch, "train_loss": round(run_loss / run_n, 4),
                                 "val_loss": round(v, 4), "elapsed_s": round(time.perf_counter() - start, 1)})
@@ -298,8 +307,11 @@ class TransformerTranslator(Translator):
                     if bad >= c.patience:
                         print("early stopping")
                         break
-                if self.time_budget_min and (time.perf_counter() - start) / 60 > self.time_budget_min:
+                if out_of_time:
                     print("time budget reached")
+                    if v < best - 1e-4:  # keep the last epoch if it is the best so far
+                        best_state = copy.deepcopy({k: t.cpu() for k, t in self.model.state_dict().items()})
+                        best = v
                     break
         if best_state is not None:
             self.model.load_state_dict(best_state)

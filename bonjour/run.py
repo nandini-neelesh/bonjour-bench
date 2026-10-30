@@ -23,6 +23,16 @@ from .utils import Timer, gpu_info, read_jsonl, seed_everything, write_json, wri
 
 RUN_NAMES = {"transformer": "transformer_scratch", "mt5": "mt5_small_ft"}
 
+# Reduced-budget profile (--quick): every model sees the same 30,000 training pairs (LoRA: 10,000),
+# training stops at the time cap, and the temperature sweep is smaller.
+QUICK = {
+    "max_train": 30_000,
+    "epochs": {"transformer": 12, "mt5": 1, "llama": 1, "gemma": 1},
+    "budget": {"transformer": 15, "mt5": 20, "llama": 15, "gemma": 15},
+    "sweep_n": 150,
+    "sweep_seeds": 2,
+}
+
 
 def build_translator(args):
     if args.model == "transformer":
@@ -48,7 +58,7 @@ def build_translator(args):
     if args.epochs:
         overrides["epochs"] = args.epochs
     if args.max_train:
-        overrides["lora_examples"] = args.max_train
+        overrides["lora_examples"] = min(args.max_train, 10_000) if args.quick else args.max_train
     cfg = C.CausalLMConfig(**{**base.__dict__, **overrides})
     return CausalLMTranslator(args.model, args.adapt, model_id=args.model_id, dtype_pref=args.dtype, cfg=cfg,
                               time_budget_min=args.time_budget_min)
@@ -75,14 +85,14 @@ def timed_translate(translator, sources, batch_size):
     return hyps, t.elapsed
 
 
-def temperature_sweep(translator, test, n, batch_size):
+def temperature_sweep(translator, test, n, batch_size, n_seeds=len(C.SWEEP_SEEDS)):
     """BLEU/chrF versus sampling temperature on a fixed random subset of the test set."""
     rng = random.Random(C.SEED)
     subset = [test[i] for i in sorted(rng.sample(range(len(test)), min(n, len(test))))]
     srcs, refs = [r["src"] for r in subset], [r["tgt"] for r in subset]
     rows = []
     for temp in C.SWEEP_TEMPERATURES:
-        seeds = (0,) if temp == 0 else C.SWEEP_SEEDS
+        seeds = (0,) if temp == 0 else tuple(range(n_seeds))
         runs = []
         for seed in seeds:
             hyps = translator.translate(srcs, temperature=temp, seed=seed, batch_size=batch_size)
@@ -108,17 +118,37 @@ def main(argv=None):
     p.add_argument("--skip-train", action="store_true", help="reuse the checkpoint in checkpoints/")
     p.add_argument("--epochs", type=int)
     p.add_argument("--vocab-size", type=int, help="SentencePiece vocabulary size (Transformer only)")
-    p.add_argument("--max-train", type=int, help="LoRA training examples (decoder-only models)")
+    p.add_argument("--max-train", type=int, help="use only the first N training pairs (all models)")
+    p.add_argument("--quick", action="store_true",
+                   help="reduced budget: 30k training pairs, short training with hard time caps, small sweep")
+    p.add_argument("--allow-cpu", action="store_true", help="do not stop when no GPU is available")
+    p.add_argument("--sweep-seeds", type=int, help="number of random seeds per sampled temperature")
     p.add_argument("--model-id", help="override the Hugging Face model id (used by the tests)")
     p.add_argument("--dtype", default="auto", choices=["auto", "fp32", "fp16", "bf16"])
     p.add_argument("--batch-size", type=int, default=C.INFER_BATCH)
-    p.add_argument("--sweep-n", type=int, default=C.SWEEP_N)
+    p.add_argument("--sweep-n", type=int)
     p.add_argument("--no-sweep", action="store_true")
     p.add_argument("--no-probes", action="store_true")
     p.add_argument("--time-budget-min", type=float, help="stop training after this many minutes")
     p.add_argument("--data-dir", default=str(C.PROCESSED_DIR))
     p.add_argument("--results-dir", default=str(C.RESULTS_DIR))
     args = p.parse_args(argv)
+
+    # --quick: a reduced but complete experiment, bounded in wall-clock time. Explicit flags win.
+    if args.quick:
+        args.max_train = args.max_train or QUICK["max_train"]
+        args.time_budget_min = args.time_budget_min or QUICK["budget"][args.model]
+        args.epochs = args.epochs or QUICK["epochs"].get(args.model)
+        args.sweep_n = args.sweep_n or QUICK["sweep_n"]
+        args.sweep_seeds = args.sweep_seeds or QUICK["sweep_seeds"]
+    args.sweep_n = args.sweep_n or C.SWEEP_N
+    args.sweep_seeds = args.sweep_seeds or len(C.SWEEP_SEEDS)
+
+    import torch
+
+    if not args.smoke and not args.allow_cpu and not torch.cuda.is_available():
+        raise SystemExit("No GPU detected. In Kaggle: Settings > Accelerator > GPU T4 x2, then restart the session.")
+    print("device:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "cpu", flush=True)
 
     seed_everything(C.SEED)
     name = run_name(args)
@@ -128,6 +158,8 @@ def main(argv=None):
 
     data = ensure_data(Path(args.data_dir), smoke=args.smoke)
     train, val, test = data["train"], data["val"], data["test"]
+    if args.max_train:
+        train = train[: args.max_train]
     srcs, refs = [r["src"] for r in test], [r["tgt"] for r in test]
     print(f"train {len(train):,} | val {len(val):,} | test {len(test):,}")
 
@@ -163,7 +195,7 @@ def main(argv=None):
           f"inference {metrics['inference_time_s']}s | params {metrics['params_total']:,}")
 
     if not args.no_sweep:
-        write_json(out / "temperature_sweep.json", temperature_sweep(translator, test, args.sweep_n, args.batch_size))
+        write_json(out / "temperature_sweep.json", temperature_sweep(translator, test, args.sweep_n, args.batch_size, args.sweep_seeds))
 
     if not args.no_probes and C.PROBES_PATH.exists():
         probes = read_jsonl(C.PROBES_PATH)

@@ -59,8 +59,8 @@ def main():
              [("code", SETUP), ("code", INSTALL), ("code", GPU),
               ("md", "Smoke test (about 3 minutes): runs the whole pipeline on a tiny sample."),
               ("code", "!python -m bonjour.run --model transformer --smoke --epochs 2 --vocab-size 2000 --no-sweep"),
-              ("md", "Full run: trains the tokenizer and the model, translates the test set, runs the temperature sweep and the ethics probes."),
-              ("code", "!python -m bonjour.run --model transformer"),
+              ("md", "Full run in quick mode (30,000 training pairs, 15-minute training cap): trains, translates the test set, runs a small temperature sweep and the ethics probes."),
+              ("code", "!python -m bonjour.run --model transformer --quick"),
               ("code", "!python scripts/zip_results.py results_transformer transformer_scratch"),
               ("md", "Download `results_transformer.zip` and extract it in the repository root.")])
 
@@ -70,7 +70,7 @@ def main():
               ("md", "Smoke test."),
               ("code", "!python -m bonjour.run --model mt5 --smoke --epochs 1 --no-sweep"),
               ("md", "Full run (fp32; mT5 is unstable in fp16)."),
-              ("code", "!python -m bonjour.run --model mt5"),
+              ("code", "!python -m bonjour.run --model mt5 --quick"),
               ("code", "!python scripts/zip_results.py results_mt5 mt5_small_ft"),
               ("md", "Download `results_mt5.zip` and extract it in the repository root.")])
 
@@ -84,9 +84,9 @@ def main():
                   ("code", f"!python -m bonjour.run --model {fam} --adapt fewshot --smoke --no-sweep\n"
                            f"!python -m bonjour.run --model {fam} --adapt lora --smoke --max-train 200 --no-sweep"),
                   ("md", "Full run 1: few-shot prompting (no training)."),
-                  ("code", f"!python -m bonjour.run --model {fam} --adapt fewshot"),
+                  ("code", f"!python -m bonjour.run --model {fam} --adapt fewshot --quick"),
                   ("md", "Full run 2: LoRA fine-tuning."),
-                  ("code", f"!python -m bonjour.run --model {fam} --adapt lora"),
+                  ("code", f"!python -m bonjour.run --model {fam} --adapt lora --quick"),
                   ("code", f"!python scripts/zip_results.py results_{fam} {fam}_fewshot {fam}_lora"),
                   ("md", f"Download `results_{fam}.zip` and extract it in the repository root.")])
 

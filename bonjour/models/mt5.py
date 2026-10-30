@@ -74,6 +74,7 @@ class MT5Translator(Translator):
         opt = Adafactor(self.model.parameters(), lr=c.lr, scale_parameter=False, relative_step=False,
                         warmup_init=False)
         history, start = [], time.perf_counter()
+        out_of_time = False
         with Timer() as timer:
             for epoch in range(1, c.epochs + 1):
                 self.model.train()
@@ -88,19 +89,22 @@ class MT5Translator(Translator):
                     opt.step()
                     opt.zero_grad(set_to_none=True)
                     run, n = run + float(loss), n + 1
-                    if k % 200 == 0:
+                    if k % 100 == 0:
                         print(f"epoch {epoch} step {k}/{len(batches)} loss {run / n:.3f} "
                               f"({time.perf_counter() - start:.0f}s)", flush=True)
+                    if self.time_budget_min and (time.perf_counter() - start) / 60 > self.time_budget_min:
+                        out_of_time = True
+                        break
                 v = self._val_loss(venc, vlabels)
                 history.append({"epoch": epoch, "train_loss": round(run / n, 4), "val_loss": round(v, 4),
                                 "elapsed_s": round(time.perf_counter() - start, 1)})
                 print(f"epoch {epoch} done | train {run / n:.3f} | val {v:.3f}", flush=True)
-                if self.time_budget_min and (time.perf_counter() - start) / 60 > self.time_budget_min:
+                if out_of_time:
                     print("time budget reached")
                     break
         self.model.eval()
         info = {"train_time_s": round(timer.elapsed, 1), "epochs_run": len(history), "history": history,
-                "train_pairs_used": len(train)}
+                "train_pairs_used": len(train), "stopped_by_time_budget": out_of_time}
         self.save(info)
         return info
 
