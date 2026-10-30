@@ -1,0 +1,5 @@
+run,system,architecture,pretrained,adaptation,params_total,params_trainable,bleu,chrf,len_ratio,copy_rate,empty_rate,train_time_s,inference_time_s,inference_ms_per_sentence,precision,n_test
+transformer_scratch,Transformer (scratch),encoder-decoder,no,trained from scratch,37619712,37619712,6.55,28.91,1.036,0.0031,0.001,250.7,13.6,7.14,fp16 autocast,1905
+mt5_small_ft,mT5-small (fine-tuned),encoder-decoder,yes,full fine-tuning,300176768,300176768,12.36,34.79,0.975,0.0068,0.0,648.6,84.58,44.4,fp32,1905
+llama_lora,LLaMA 3.2 1B (LoRA),decoder-only,yes,LoRA fine-tuning,1235814400,11272192,23.6,49.15,0.965,0.0184,0.0,132.4,132.3,69.45,float16,1905
+gemma_lora,Gemma 3 1B (LoRA),decoder-only,yes,LoRA fine-tuning,999885952,13045760,27.29,52.75,0.981,0.0194,0.0,501.3,286.31,150.29,float32,1905
